@@ -1,0 +1,1 @@
+export const apiurl="http://localhost:9090/api/route/"

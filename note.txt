@@ -1,0 +1,21 @@
+watch video https://drive.google.com/file/d/1uWMP7_-6pe5yoCuualzgsioyTkHfdye7/view?usp=sharing
+
+api end point:{
+    http://localhost:9090/api/route/},
+  
+
+route:(
+/login
+/register
+/post
+/mypost
+/getmyprofile/:id
+/getotheruser
+/like/:id
+/bookmark/:id
+/follow/:id
+/unfollow/:id
+/getalltweet
+/getfollowingtweets
+/deletetweet/:id
+)
