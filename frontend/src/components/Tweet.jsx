@@ -8,17 +8,18 @@ import { apiurl } from '../apiurl';
 import toast from 'react-hot-toast';
 import { getRefresh } from '../redux/tweetSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { AiOutlineRetweet } from 'react-icons/ai';
 
 const Tweet = ({ tweet }) => {
     const dispatch = useDispatch();
     const { user } = useSelector(state => state.user)
-    console.log(user);
+    console.log(tweet);
     const likeOrDislikeHandler = async (id) => {
         try {
             const token = sessionStorage.getItem("token");
-            const response = await axios.put(apiurl + `like/${id}`,{}, {
+            const response = await axios.put(apiurl + `like/${id}`, {}, {
                 headers: {
-                   
+
                     "Authorization": "Bearer " + token
                 },
                 // withCredentials: true
@@ -29,7 +30,7 @@ const Tweet = ({ tweet }) => {
             console.log(error);
         }
     }
-    const deleteTweethandler =async(id)=>{
+    const deleteTweethandler = async (id) => {
         try {
             const token = sessionStorage.getItem("token");
             const response = await axios.delete(apiurl + `deletetweet/${id}`, {
@@ -44,7 +45,22 @@ const Tweet = ({ tweet }) => {
             console.log(error);
         }
     }
-
+    const retweet=async(id)=>{
+        try {
+            const token = sessionStorage.getItem("token");
+            console.log(id);
+            const response = await axios.post(apiurl + `retweet/${id}`,{}, {
+                headers: {
+                    "Authorization": "Bearer " + token
+                },
+                withCredentials: true
+            });
+            dispatch(getRefresh());
+            toast.success(response.data.message);
+        } catch (error) {
+            console.log(error);
+        }
+    }
     return (
         <div className='border-b border-gray-200'>
             <div className='flex p-4'>
@@ -64,6 +80,12 @@ const Tweet = ({ tweet }) => {
                             </div>
                             <p>0</p>
                         </div>
+                        {user?._id !== tweet?.userId && <div className='flex items-center'>
+                            <div onClick={() => retweet(tweet?._id)} className='p-2 hover:bg-green-200 rounded-full cursor-pointer'>
+                                <AiOutlineRetweet size={"20px"} />
+                            </div>
+                            <p>{tweet?.retweets?.length}</p>
+                        </div>}
                         <div className='flex items-center'>
                             <div onClick={() => likeOrDislikeHandler(tweet?._id)} className='p-2 hover:bg-pink-200 rounded-full cursor-pointer'>
                                 <CiHeart size={"24px"} />
@@ -79,7 +101,7 @@ const Tweet = ({ tweet }) => {
                         </div>
                         {
                             user?._id === tweet?.userId && (<div className='flex items-center'>
-                                <div onClick={()=>deleteTweethandler(tweet?._id)} className='p-2 hover:bg-red-400 rounded-full cursor-pointer'>
+                                <div onClick={() => deleteTweethandler(tweet?._id)} className='p-2 hover:bg-red-400 rounded-full cursor-pointer'>
                                     <MdOutlineDelete size={"24px"} />
                                 </div>
                                 <p>{tweet?.bookmark?.length}</p>

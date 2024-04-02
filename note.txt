@@ -1,5 +1,7 @@
 watch video https://drive.google.com/file/d/1uWMP7_-6pe5yoCuualzgsioyTkHfdye7/view?usp=sharing
 
+frontend and backend use command npm i for dependency
+
 api end point:{
     http://localhost:9090/api/route/},
   

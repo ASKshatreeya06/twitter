@@ -13,10 +13,20 @@ const postModel = mongoose.Schema({
         type: Array,
         default: []
     },
-    userDetails:{
+    userDetails: {
         type: Array,
         default: []
     },
+    comments: [
+        {
+            commnet: {type:String},
+            userId: { type: ObjectId, ref: "userModel" }
+        }
+    ],
+    retweets: [
+        {type: mongoose.Schema.Types.ObjectId, ref: 'userModel' ,
+        require:true}
+    ],
     userId: {
         type: ObjectId,
         ref: "userModel"

@@ -41,6 +41,10 @@ const userModel = mongoose.Schema({
         type:Array,
         default:[]
     },
+    description:{
+        type:String,
+        require:true
+    }
 },{timestamps:true})
 mongoose.model('userModel', userModel);
 module.exports = userModel;

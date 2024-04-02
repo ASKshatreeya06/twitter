@@ -4,6 +4,32 @@ const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const userModel = mongoose.model('userModel');
 
+
+
+const profileUpdate = async (req, res) => {
+    try {
+        const { fullName, email, phone, description } = req.body
+        // console.log(req.body);
+        const user = await userModel.findById(req.user._id)
+        // console.log(user);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        user.fullName = fullName;
+        user.phone = phone;
+        user.description = description
+        user.email = email;
+
+        // Save the updated user
+        await user.save();
+
+        // Send response with updated user profile
+        res.status(200).json({ message: "User profile updated successfully", user });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 const Register = async (req, res) => {
     try {
         const { firstName, lastName, email, phone, password } = req.body;
@@ -54,7 +80,7 @@ const Login = async (req, res) => {
         }
         const jwtToken = jwt.sign({ _id: userInDb._id }, process.env.JWT_KEY, { expiresIn: "1d" });
         const user = await userModel.find(userInDb._id).select("-password")
-// console.log(user)
+        // console.log(user)
         res.cookie('token', jwtToken, { expiresIn: "1d", httpOnly: true });
         res.status(200).json({ token: jwtToken, user: user, message: `welcome back ${userInDb.fullName}`, success: true });
         // console.log("user logged in");
@@ -153,4 +179,4 @@ const UnFollow = async (req, res) => {
     }
 }
 
-module.exports = { Register, Login, Logout, Bookmark, getMyProfile, getOtherUser, Follow, UnFollow };
+module.exports = { Register, Login, Logout, Bookmark, getMyProfile, getOtherUser, Follow, UnFollow, profileUpdate };
